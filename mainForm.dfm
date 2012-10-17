@@ -11,6 +11,7 @@ object Form1: TForm1
   Font.Name = #23435#20307
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 12
   object LabelCOMInfo: TLabel
@@ -24,7 +25,7 @@ object Form1: TForm1
     Top = 31
     Width = 75
     Height = 25
-    Caption = 'Show'
+    Caption = #26174#31034
     TabOrder = 0
     OnClick = Button1Click
   end
@@ -54,6 +55,8 @@ object Form1: TForm1
     OnClick = Button2Click
   end
   object OpenDialog1: TOpenDialog
+    Filter = 'ActiveX'#25511#20214'(*.ocx;*.dll)|*.ocx;*.dll'
+    InitialDir = 'D:\'
     Left = 744
   end
 end

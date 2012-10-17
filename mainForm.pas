@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls,untComLib, ComCtrls,untComTypeLibrary;
+  Dialogs, StdCtrls,untComLib, ComCtrls,untComTypeLibrary, ShellApi;
 
 type
   TForm1 = class(TForm)
@@ -16,11 +16,15 @@ type
     LabelCOMInfo: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
     procedure AddToTreeView(list:TComInfoList);
   public
     { Public declarations }
+    // declare our DROPFILES message handler
+    procedure AcceptFiles( var msg : TMessage );
+      message WM_DROPFILES;
   end;
 
 var
@@ -29,6 +33,35 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TForm1.AcceptFiles( var msg : TMessage );
+const
+  cnMaxFileNameLen = 255;
+var
+  i,
+  nCount     : integer;
+  acFileName : array [0..cnMaxFileNameLen] of char;
+begin
+  // find out how many files we're accepting
+  nCount := DragQueryFile( msg.WParam,
+                           $FFFFFFFF,
+                           acFileName,
+                           cnMaxFileNameLen );
+
+  // query Windows one at a time for the file name
+  for i := 0 to nCount-1 do
+  begin
+    DragQueryFile( msg.WParam, i,
+                   acFileName, cnMaxFileNameLen );
+
+    // do your thing with the acFileName
+    //MessageBox( Handle, acFileName, '', MB_OK );
+    Edit1.Text := acFileName;
+  end;
+
+  // let Windows know that you're done
+  DragFinish( msg.WParam );
+end;
 
 procedure TForm1.AddToTreeView(list: TComInfoList);
 var
@@ -89,6 +122,14 @@ procedure TForm1.Button2Click(Sender: TObject);
 begin
   if OpenDialog1.Execute then
     Edit1.Text := OpenDialog1.FileName ;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+// tell Windows that you're
+  // accepting drag and drop files
+  //
+  DragAcceptFiles( Handle, True );
 end;
 
 end.
