@@ -1,7 +1,7 @@
 object Form1: TForm1
   Left = 192
   Top = 115
-  Caption = 'Show ActiveX Interface'
+  Caption = 'ActiveX'#25509#21475#26597#30475
   ClientHeight = 479
   ClientWidth = 777
   Color = clBtnFace

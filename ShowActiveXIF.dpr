@@ -10,6 +10,7 @@ uses
 
 begin
   Application.Initialize;
+  Application.Title := 'ActiveX控件接口查看工具';
   Application.CreateForm(TForm1, Form1);
   Application.Run;
 end.
