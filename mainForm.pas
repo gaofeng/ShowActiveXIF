@@ -13,7 +13,7 @@ type
     TreeView1: TTreeView;
     Button2: TButton;
     OpenDialog1: TOpenDialog;
-    Label1: TLabel;
+    LabelCOMInfo: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
   private
@@ -59,8 +59,7 @@ begin
   
   com1:=TTypeLibrary.Create(Edit1.Text );
 
-  Label1.Caption := Com1.Name +'\'+GuidTostring(com1.Guid) +com1.Description;
-
+  LabelCOMInfo.Caption := Com1.Name +'\'+GuidTostring(com1.Guid) +com1.Description;
 
   for i:=0 to com1.CoClassCount-1 do begin
     with com1.CoClasses[i] do begin

@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 192
   Top = 115
   Caption = 'Show ActiveX Interface'
-  ClientHeight = 466
-  ClientWidth = 971
+  ClientHeight = 481
+  ClientWidth = 776
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -13,16 +13,15 @@ object Form1: TForm1
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 12
-  object Label1: TLabel
-    Left = 264
-    Top = 40
-    Width = 36
+  object LabelCOMInfo: TLabel
+    Left = 113
+    Top = 44
+    Width = 6
     Height = 12
-    Caption = 'Label1'
   end
   object Button1: TButton
-    Left = 32
-    Top = 168
+    Left = 8
+    Top = 31
     Width = 75
     Height = 25
     Caption = 'Show'
@@ -30,32 +29,31 @@ object Form1: TForm1
     OnClick = Button1Click
   end
   object Edit1: TEdit
-    Left = 32
-    Top = 128
-    Width = 161
+    Left = 89
+    Top = 5
+    Width = 640
     Height = 20
     TabOrder = 1
     Text = 'c:\test.ocx'
   end
   object TreeView1: TTreeView
-    Left = 256
-    Top = 64
-    Width = 665
-    Height = 361
+    Left = 8
+    Top = 62
+    Width = 760
+    Height = 411
     Indent = 19
     TabOrder = 2
   end
   object Button2: TButton
-    Left = 194
-    Top = 129
-    Width = 21
-    Height = 20
-    Caption = '...'
+    Left = 8
+    Top = 3
+    Width = 73
+    Height = 28
+    Caption = #25171#24320#25991#20214
     TabOrder = 3
     OnClick = Button2Click
   end
   object OpenDialog1: TOpenDialog
-    Left = 160
-    Top = 24
+    Left = 744
   end
 end
