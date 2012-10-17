@@ -208,9 +208,14 @@ var
 
   i,j:Integer;
   MyTreeNode1: TTreeNode;
+  path :string;
 begin
+  if Edit1.Text = '' then
+  begin
+    exit;
+  end;
   try
-    com1:=TTypeLibrary.Create(Edit1.Text );
+    com1:=TTypeLibrary.Create(Edit1.Text);
     LabelCOMInfo.Caption := Com1.Name +'\'+GuidTostring(com1.Guid) +
           com1.Description;
 

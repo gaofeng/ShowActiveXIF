@@ -48,7 +48,6 @@ object Form1: TForm1
     Width = 640
     Height = 20
     TabOrder = 1
-    Text = 'd:\PCVR_IDCard.ocx'
   end
   object TreeView1: TTreeView
     Left = 543
