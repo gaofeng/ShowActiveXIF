@@ -14,12 +14,15 @@ type
     Button2: TButton;
     OpenDialog1: TOpenDialog;
     LabelCOMInfo: TLabel;
+    Memo1: TMemo;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
     procedure AddToTreeView(list:TComInfoList);
+    procedure ComLibToTreeView(com1: TTypeLibrary);
+    procedure ComLibToMemo(com1: TTypeLibrary);
   public
     { Public declarations }
     // declare our DROPFILES message handler
@@ -78,30 +81,23 @@ begin
   end;
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.ComLibToTreeView(com1: TTypeLibrary);
 var
-  com:TComInfoList;
-  com1:TTypeLibrary;
-
   i,j:Integer;
   MyTreeNode1: TTreeNode;
 begin
-  //com:=TComInfoList.Create(Edit1.Text ) ;
-  //AddToTreeView(com);
-  //com.Free ;
-  
-  com1:=TTypeLibrary.Create(Edit1.Text );
-
-  LabelCOMInfo.Caption := Com1.Name +'\'+GuidTostring(com1.Guid) +com1.Description;
+  TreeView1.Items.Clear;
 
   for i:=0 to com1.CoClassCount-1 do begin
     with com1.CoClasses[i] do begin
       MyTreeNode1:=TreeView1.Items.Add(nil,'[ CoClass ] '+Name +'\'+GuidToString(Guid ));
       for j:=0 to Interfacecount-1 do begin
-        TreeView1.Items.AddChild(MyTreeNode1,Format('%s\%s',[Interfaces[j].Name,GuidToString(Interfaces[j].Guid ) ]));
+        TreeView1.Items.AddChild(MyTreeNode1,Format('%s\%s',[Interfaces[j].Name,
+               GuidToString(Interfaces[j].Guid ) ]));
       end;
       for j:=0 to functionCount-1 do begin
-        TreeView1.Items.AddChild(MyTreeNode1,Format('%-30.30s  [%s] %8.8x',[Functions[j].Name,Functions[j].InvokeKind ,Functions[j].Offset ]));
+        TreeView1.Items.AddChild(MyTreeNode1,Format('%-30.30s  [%s] %8.8x',
+              [Functions[j].Name,Functions[j].InvokeKind ,Functions[j].Offset ]));
       end;
     end;
   end;
@@ -110,11 +106,97 @@ begin
     with com1.Interfaces[i] do begin
       MyTreeNode1:=TreeView1.Items.Add(nil,'[ Interface ] '+Name );
       for j:=0 to FunctionCount-1 do begin
-        TreeView1.Items.AddChild(MyTreeNode1,Format('[%d]%s',[Functions[j].id,Functions[j].Name]));
+        TreeView1.Items.AddChild(MyTreeNode1,Format('[%d]%s',[Functions[j].id,
+              Functions[j].Name]));
+      end;
+    end;
+  end;
+end;
+
+procedure TForm1.ComLibToMemo(com1: TTypeLibrary);
+var
+  i, j, k:Integer;
+  MyTreeNode1: TTreeNode;
+  str: string;
+begin
+  Memo1.Clear;
+
+  for i:=0 to com1.CoClassCount-1 do
+  begin
+    with com1.CoClasses[i] do
+    begin
+      str := Format('[CoClass %d/%d]', [i + 1, com1.CoClassCount]) + Name + '\'+ GuidToString(Guid );
+      Memo1.Lines.Add(str);
+      str := Format('    Interface count: %d', [Interfacecount]);
+      Memo1.Lines.Add(str);
+      for j:=0 to Interfacecount-1 do
+      begin
+        str := Format('        %s\%s',
+              [Interfaces[j].Name,
+              GuidToString(Interfaces[j].Guid ) ]);
+        Memo1.Lines.Add(str);
+      end;
+      str := Format('    Function count: %d', [functionCount]);
+      Memo1.Lines.Add(str);
+      for j:=0 to functionCount-1 do
+      begin
+        str := Format('    %-30.30s  [%s] %8.8x',
+              [Functions[j].Name,
+              Functions[j].InvokeKind ,
+              Functions[j].Offset ]);
+        Memo1.Lines.Add(str);
       end;
     end;
   end;
 
+  for i:=0 to com1.InterfaceCount -1 do
+  begin
+    with com1.Interfaces[i] do
+    begin
+      str := Format('[Interface %s(%d/%d)] %d Functions',
+              [com1.Interfaces[i].Name, i + 1, com1.InterfaceCount,
+              FunctionCount]);
+      Memo1.Lines.Add(str);
+      for j:=0 to FunctionCount-1 do
+      begin
+        str := Format('    [%d]%s',[Functions[j].id,
+              Functions[j].Name]);
+        Memo1.Lines.Add(str);
+
+      end;
+    end;
+  end;
+
+  for i:=0 to com1.InterfaceCount -1 do
+  begin
+    str := Format('[Interface %s(%d/%d)] %d Properties',
+              [com1.Interfaces[i].Name, i + 1, com1.InterfaceCount,
+              com1.Interfaces[i].PropertyCount]);
+    Memo1.Lines.Add(str);
+    for j:=0 to com1.Interfaces[i].PropertyCount - 1 do
+    begin
+      str := Format('    [%d]%s',
+            [com1.Interfaces[i].Properties[j].ID,
+             com1.Interfaces[i].Properties[j].Name]);
+      Memo1.Lines.Add(str);
+    end;
+  end;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  com1:TTypeLibrary;
+
+  i,j:Integer;
+  MyTreeNode1: TTreeNode;
+begin
+
+  com1:=TTypeLibrary.Create(Edit1.Text );
+
+  LabelCOMInfo.Caption := Com1.Name +'\'+GuidTostring(com1.Guid) +com1.Description;
+
+  ComLibToTreeView(com1);
+  ComLibToMemo(com1);
   com1.Free ;
 end;
 

@@ -12,6 +12,9 @@ object Form1: TForm1
   Font.Style = []
   OldCreateOrder = False
   OnCreate = FormCreate
+  DesignSize = (
+    776
+    481)
   PixelsPerInch = 96
   TextHeight = 12
   object LabelCOMInfo: TLabel
@@ -35,12 +38,12 @@ object Form1: TForm1
     Width = 640
     Height = 20
     TabOrder = 1
-    Text = 'c:\test.ocx'
+    Text = 'd:\DWCardReader.dll'
   end
   object TreeView1: TTreeView
-    Left = 8
+    Left = 367
     Top = 62
-    Width = 760
+    Width = 401
     Height = 411
     Indent = 19
     TabOrder = 2
@@ -53,6 +56,20 @@ object Form1: TForm1
     Caption = #25171#24320#25991#20214
     TabOrder = 3
     OnClick = Button2Click
+  end
+  object Memo1: TMemo
+    AlignWithMargins = True
+    Left = 8
+    Top = 62
+    Width = 353
+    Height = 411
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Lines.Strings = (
+      '')
+    ReadOnly = True
+    ScrollBars = ssBoth
+    TabOrder = 4
+    WordWrap = False
   end
   object OpenDialog1: TOpenDialog
     Filter = 'ActiveX'#25511#20214'(*.ocx;*.dll)|*.ocx;*.dll'
