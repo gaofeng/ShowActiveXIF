@@ -15,6 +15,7 @@ type
     OpenDialog1: TOpenDialog;
     LabelCOMInfo: TLabel;
     Memo1: TMemo;
+    Label1: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -44,6 +45,7 @@ var
   i,
   nCount     : integer;
   acFileName : array [0..cnMaxFileNameLen] of char;
+  FileExt    : string;
 begin
   // find out how many files we're accepting
   nCount := DragQueryFile( msg.WParam,
@@ -59,6 +61,8 @@ begin
 
     // do your thing with the acFileName
     //MessageBox( Handle, acFileName, '', MB_OK );
+    FileExt := ExtractFileExt(acFileName);
+
     Edit1.Text := acFileName;
   end;
 
@@ -148,7 +152,7 @@ begin
       end;
     end;
   end;
-
+  //显示所有接口的函数
   for i:=0 to com1.InterfaceCount -1 do
   begin
     with com1.Interfaces[i] do
@@ -159,14 +163,27 @@ begin
       Memo1.Lines.Add(str);
       for j:=0 to FunctionCount-1 do
       begin
-        str := Format('    [%d]%s',[Functions[j].id,
+        str := Format('    [%-3d]%s %s',
+              [Functions[j].ID,
+              Functions[j].Value.DataTypeName,
               Functions[j].Name]);
+        //Memo1.Lines.Add(str);
+        str := str + '(';
+        for k := 0 to Functions[j].ParamCount - 1 do
+        begin
+          str := str + Format('%s %s', [Functions[j].Params[k].DataTypeName,
+                Functions[j].Params[k].Name]);
+          if k < Functions[j].ParamCount - 1 then
+          begin
+            str := str + ', ';
+          end;
+        end;
+        str := str + ')';
         Memo1.Lines.Add(str);
-
       end;
     end;
   end;
-
+  //显示所有接口的属性
   for i:=0 to com1.InterfaceCount -1 do
   begin
     str := Format('[Interface %s(%d/%d)] %d Properties',
@@ -175,9 +192,11 @@ begin
     Memo1.Lines.Add(str);
     for j:=0 to com1.Interfaces[i].PropertyCount - 1 do
     begin
-      str := Format('    [%d]%s',
+      str := Format('    [%-3d]%s %s',
             [com1.Interfaces[i].Properties[j].ID,
-             com1.Interfaces[i].Properties[j].Name]);
+             com1.Interfaces[i].Properties[j].Value.DataTypeName,
+             com1.Interfaces[i].Properties[j].Name
+             ]);
       Memo1.Lines.Add(str);
     end;
   end;
@@ -190,14 +209,18 @@ var
   i,j:Integer;
   MyTreeNode1: TTreeNode;
 begin
+  try
+    com1:=TTypeLibrary.Create(Edit1.Text );
+    LabelCOMInfo.Caption := Com1.Name +'\'+GuidTostring(com1.Guid) +
+          com1.Description;
 
-  com1:=TTypeLibrary.Create(Edit1.Text );
-
-  LabelCOMInfo.Caption := Com1.Name +'\'+GuidTostring(com1.Guid) +com1.Description;
-
-  ComLibToTreeView(com1);
-  ComLibToMemo(com1);
-  com1.Free ;
+    ComLibToTreeView(com1);
+    ComLibToMemo(com1);
+    com1.Free ;
+  except
+    on E : Exception do
+      ShowMessage(E.Message);
+  end;
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);

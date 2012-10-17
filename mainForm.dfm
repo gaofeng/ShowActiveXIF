@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 192
   Top = 115
   Caption = 'Show ActiveX Interface'
-  ClientHeight = 481
-  ClientWidth = 776
+  ClientHeight = 479
+  ClientWidth = 777
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -13,15 +13,25 @@ object Form1: TForm1
   OldCreateOrder = False
   OnCreate = FormCreate
   DesignSize = (
-    776
-    481)
+    777
+    479)
   PixelsPerInch = 96
   TextHeight = 12
   object LabelCOMInfo: TLabel
-    Left = 113
-    Top = 44
-    Width = 6
+    Left = 8
+    Top = 62
+    Width = 30
     Height = 12
+    Caption = #20449#24687':'
+  end
+  object Label1: TLabel
+    AlignWithMargins = True
+    Left = 8
+    Top = 463
+    Width = 168
+    Height = 12
+    Anchors = [akLeft, akBottom]
+    Caption = '2012/10/17 gf@dareway.com.cn'
   end
   object Button1: TButton
     Left = 8
@@ -38,15 +48,16 @@ object Form1: TForm1
     Width = 640
     Height = 20
     TabOrder = 1
-    Text = 'd:\DWCardReader.dll'
+    Text = 'd:\PCVR_IDCard.ocx'
   end
   object TreeView1: TTreeView
-    Left = 367
-    Top = 62
-    Width = 401
-    Height = 411
+    Left = 543
+    Top = 31
+    Width = 74
+    Height = 33
     Indent = 19
     TabOrder = 2
+    Visible = False
   end
   object Button2: TButton
     Left = 8
@@ -60,9 +71,9 @@ object Form1: TForm1
   object Memo1: TMemo
     AlignWithMargins = True
     Left = 8
-    Top = 62
-    Width = 353
-    Height = 411
+    Top = 80
+    Width = 761
+    Height = 377
     Anchors = [akLeft, akTop, akRight, akBottom]
     Lines.Strings = (
       '')
