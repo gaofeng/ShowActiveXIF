@@ -21,6 +21,7 @@ type
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
+    procedure ShowInterface();
     procedure AddToTreeView(list:TComInfoList);
     procedure ComLibToTreeView(com1: TTypeLibrary);
     procedure ComLibToMemo(com1: TTypeLibrary);
@@ -64,6 +65,7 @@ begin
     FileExt := ExtractFileExt(acFileName);
 
     Edit1.Text := acFileName;
+    ShowInterface();
   end;
 
   // let Windows know that you're done
@@ -202,7 +204,7 @@ begin
   end;
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.ShowInterface();
 var
   com1:TTypeLibrary;
 
@@ -219,13 +221,22 @@ begin
     LabelCOMInfo.Caption := Com1.Name +'\'+GuidTostring(com1.Guid) +
           com1.Description;
 
-    ComLibToTreeView(com1);
+    //ComLibToTreeView(com1);
     ComLibToMemo(com1);
-    com1.Free ;
+    com1.Destroy;
   except
     on E : Exception do
+    begin
       ShowMessage(E.Message);
+      Memo1.Clear;
+      LabelCOMInfo.Caption := '';
+    end;
   end;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  ShowInterface();
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);

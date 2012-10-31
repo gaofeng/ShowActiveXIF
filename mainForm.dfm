@@ -31,7 +31,7 @@ object Form1: TForm1
     Width = 168
     Height = 12
     Anchors = [akLeft, akBottom]
-    Caption = '2012/10/17 gf@dareway.com.cn'
+    Caption = '2012/10/31 gf@dareway.com.cn'
   end
   object Button1: TButton
     Left = 8
