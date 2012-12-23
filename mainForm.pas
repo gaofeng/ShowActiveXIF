@@ -16,6 +16,7 @@ type
     LabelCOMInfo: TLabel;
     Memo1: TMemo;
     Label1: TLabel;
+    lbl1: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -131,6 +132,8 @@ begin
   begin
     with com1.CoClasses[i] do
     begin
+      str := 'CLASSID='+ GuidToString(Guid );
+      Memo1.Lines.Add(str);
       str := Format('[CoClass %d/%d]', [i + 1, com1.CoClassCount]) + Name + '\'+ GuidToString(Guid );
       Memo1.Lines.Add(str);
       str := Format('    Interface count: %d', [Interfacecount]);

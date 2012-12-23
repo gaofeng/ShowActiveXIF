@@ -31,22 +31,37 @@ object Form1: TForm1
     Width = 168
     Height = 12
     Anchors = [akLeft, akBottom]
-    Caption = '2012/10/31 gf@dareway.com.cn'
+    Caption = '2012/12/23 gf@dareway.com.cn'
+  end
+  object lbl1: TLabel
+    Left = 96
+    Top = 31
+    Width = 72
+    Height = 12
+    Caption = #25903#25345#25991#20214#25302#20837
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = #23435#20307
+    Font.Style = [fsItalic]
+    ParentFont = False
   end
   object Button1: TButton
     Left = 8
     Top = 31
-    Width = 75
-    Height = 25
+    Width = 82
+    Height = 28
     Caption = #26174#31034
     TabOrder = 0
     OnClick = Button1Click
   end
   object Edit1: TEdit
-    Left = 89
+    Left = 96
     Top = 5
-    Width = 640
+    Width = 673
     Height = 20
+    HelpType = htKeyword
+    Anchors = [akLeft, akTop, akRight]
     TabOrder = 1
   end
   object TreeView1: TTreeView
@@ -61,9 +76,10 @@ object Form1: TForm1
   object Button2: TButton
     Left = 8
     Top = 3
-    Width = 73
+    Width = 82
     Height = 28
-    Caption = #25171#24320#25991#20214
+    Hint = 'sdfdfe'
+    Caption = #25171#24320#25991#20214'...'
     TabOrder = 3
     OnClick = Button2Click
   end
@@ -84,6 +100,7 @@ object Form1: TForm1
   object OpenDialog1: TOpenDialog
     Filter = 'ActiveX'#25511#20214'(*.ocx;*.dll)|*.ocx;*.dll'
     InitialDir = 'D:\'
-    Left = 744
+    Left = 736
+    Top = 40
   end
 end
