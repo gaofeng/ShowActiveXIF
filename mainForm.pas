@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls,untComLib, ComCtrls,untComTypeLibrary, ShellApi;
+  Dialogs, StdCtrls,untComLib, ComCtrls,untComTypeLibrary, ShellApi, ActiveX;
 
 type
   TForm1 = class(TForm)
@@ -20,6 +20,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Memo1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
     procedure ShowInterface();
@@ -125,16 +126,32 @@ var
   i, j, k:Integer;
   MyTreeNode1: TTreeNode;
   str: string;
+  clsid: string;
+  progid:PChar;
+  ret:Integer;
 begin
   Memo1.Clear;
+  Memo1.Lines.Add(Com1.Name +'\'+GuidTostring(com1.Guid) + com1.Description);
 
   for i:=0 to com1.CoClassCount-1 do
   begin
     with com1.CoClasses[i] do
     begin
-      str := 'CLASSID='+ GuidToString(Guid );
-      Memo1.Lines.Add(str);
-      str := Format('[CoClass %d/%d]', [i + 1, com1.CoClassCount]) + Name + '\'+ GuidToString(Guid );
+      clsid := GuidToString(Guid);
+      Memo1.Lines.Add('CLASSID = '+ clsid);
+      ret := ActiveX.ProgIDFromCLSID(Guid, progid);
+      if ret = S_OK then
+      begin
+        Memo1.Lines.Add('ProgID  = '+ progid);
+      end
+      else if ret = REGDB_E_CLASSNOTREG then
+      begin
+        Memo1.Lines.Add('ProgID  = [Not registered]');
+      end;
+
+      Memo1.Lines.Add('');
+      str := Format('[CoClass %d/%d]', [i + 1, com1.CoClassCount]) +
+                    Name + '\'+ clsid;
       Memo1.Lines.Add(str);
       str := Format('    Interface count: %d', [Interfacecount]);
       Memo1.Lines.Add(str);
@@ -205,6 +222,7 @@ begin
       Memo1.Lines.Add(str);
     end;
   end;
+  Memo1.Perform(WM_VSCROLL,SB_TOP,nil);
 end;
 
 procedure TForm1.ShowInterface();
@@ -221,8 +239,6 @@ begin
   end;
   try
     com1:=TTypeLibrary.Create(Edit1.Text);
-    LabelCOMInfo.Caption := Com1.Name +'\'+GuidTostring(com1.Guid) +
-          com1.Description;
 
     //ComLibToTreeView(com1);
     ComLibToMemo(com1);
@@ -256,4 +272,14 @@ begin
   DragAcceptFiles( Handle, True );
 end;
 
+procedure TForm1.Memo1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  //Ctrl+A进行全选
+  if (Key=Ord('A')) and (ssCtrl in Shift) then
+     begin
+       Memo1.SelectAll;
+       Key:=0;
+     end;
+  end;
 end.

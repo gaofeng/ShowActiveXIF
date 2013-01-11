@@ -18,11 +18,12 @@ object Form1: TForm1
   PixelsPerInch = 96
   TextHeight = 12
   object LabelCOMInfo: TLabel
-    Left = 8
-    Top = 62
+    Left = 400
+    Top = 38
     Width = 30
     Height = 12
     Caption = #20449#24687':'
+    Visible = False
   end
   object Label1: TLabel
     AlignWithMargins = True
@@ -31,13 +32,13 @@ object Form1: TForm1
     Width = 168
     Height = 12
     Anchors = [akLeft, akBottom]
-    Caption = '2012/12/23 gf@dareway.com.cn'
+    Caption = '2013/01/11 gf@dareway.com.cn'
   end
   object lbl1: TLabel
-    Left = 96
-    Top = 31
+    Left = 101
+    Top = 32
     Width = 72
-    Height = 12
+    Height = 14
     Caption = #25903#25345#25991#20214#25302#20837
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -86,16 +87,23 @@ object Form1: TForm1
   object Memo1: TMemo
     AlignWithMargins = True
     Left = 8
-    Top = 80
+    Top = 65
     Width = 761
-    Height = 377
+    Height = 392
     Anchors = [akLeft, akTop, akRight, akBottom]
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = #23435#20307
+    Font.Style = []
     Lines.Strings = (
       '')
+    ParentFont = False
     ReadOnly = True
     ScrollBars = ssBoth
     TabOrder = 4
     WordWrap = False
+    OnKeyDown = Memo1KeyDown
   end
   object OpenDialog1: TOpenDialog
     Filter = 'ActiveX'#25511#20214'(*.ocx;*.dll)|*.ocx;*.dll'
