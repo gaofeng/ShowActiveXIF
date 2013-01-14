@@ -21,6 +21,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Memo1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     procedure ShowInterface();
@@ -29,6 +30,7 @@ type
     procedure ComLibToMemo(com1: TTypeLibrary);
   public
     { Public declarations }
+    FilePath: string;
     // declare our DROPFILES message handler
     procedure AcceptFiles( var msg : TMessage );
       message WM_DROPFILES;
@@ -270,6 +272,15 @@ begin
   // accepting drag and drop files
   //
   DragAcceptFiles( Handle, True );
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+begin
+  if Length(FilePath) > 0 then
+  begin
+    Edit1.Text := FilePath;
+    ShowInterface;
+  end;
 end;
 
 procedure TForm1.Memo1KeyDown(Sender: TObject; var Key: Word;

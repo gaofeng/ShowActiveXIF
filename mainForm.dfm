@@ -1,17 +1,20 @@
 object Form1: TForm1
-  Left = 192
-  Top = 115
+  Left = 360
+  Top = 225
   Caption = 'ActiveX'#25509#21475#26597#30475
   ClientHeight = 479
   ClientWidth = 777
   Color = clBtnFace
+  DoubleBuffered = True
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
   Font.Name = #23435#20307
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesigned
   OnCreate = FormCreate
+  OnShow = FormShow
   DesignSize = (
     777
     479)
@@ -32,13 +35,13 @@ object Form1: TForm1
     Width = 168
     Height = 12
     Anchors = [akLeft, akBottom]
-    Caption = '2013/01/11 gf@dareway.com.cn'
+    Caption = '2013/01/14 gf@dareway.com.cn'
   end
   object lbl1: TLabel
     Left = 101
     Top = 32
     Width = 72
-    Height = 14
+    Height = 12
     Caption = #25903#25345#25991#20214#25302#20837
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -49,9 +52,9 @@ object Form1: TForm1
   end
   object Button1: TButton
     Left = 8
-    Top = 31
+    Top = 34
     Width = 82
-    Height = 28
+    Height = 27
     Caption = #26174#31034
     TabOrder = 0
     OnClick = Button1Click
@@ -79,8 +82,7 @@ object Form1: TForm1
     Top = 3
     Width = 82
     Height = 28
-    Hint = 'sdfdfe'
-    Caption = #25171#24320#25991#20214'...'
+    Caption = #36873#25321#25991#20214
     TabOrder = 3
     OnClick = Button2Click
   end
