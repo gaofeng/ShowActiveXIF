@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls,untComLib, ComCtrls,untComTypeLibrary, ShellApi, ActiveX;
+  Dialogs, StdCtrls,untComLib, ComCtrls,untComTypeLibrary, ShellApi, ActiveX,
+  Registry;
 
 type
   TForm1 = class(TForm)
@@ -16,18 +17,25 @@ type
     LabelCOMInfo: TLabel;
     Memo1: TMemo;
     Label1: TLabel;
+    edtClsId: TEdit;
     lbl1: TLabel;
+    edtProgID: TEdit;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Memo1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure edtClsIdDblClick(Sender: TObject);
+    procedure edtClsIdKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
     procedure ShowInterface();
     procedure AddToTreeView(list:TComInfoList);
     procedure ComLibToTreeView(com1: TTypeLibrary);
     procedure ComLibToMemo(com1: TTypeLibrary);
+    procedure FindClsId(clsid: string);
+    procedure EnumSubKeys(RootKey: HKEY; const Key: string);
   public
     { Public declarations }
     FilePath: string;
@@ -123,10 +131,39 @@ begin
   end;
 end;
 
+procedure TForm1.edtClsIdDblClick(Sender: TObject);
+begin
+   edtClsId.SelectAll;
+end;
+
+procedure TForm1.edtClsIdKeyPress(Sender: TObject; var Key: Char);
+var
+  text_len: Integer;
+begin
+  if key=#13 then
+  begin
+    text_len := Length(edtClsId.Text);
+    if text_len = 38 then
+    begin
+      FindClsId(edtClsId.Text);
+    end
+    else if text_len = 36 then
+    begin
+      FindClsId('{' + edtClsId.Text + '}');
+    end
+    else
+    begin
+      MessageBox(0, 'ÄúÊäÈëµÄCLSID³¤¶È´íÎó,Çë¼ì²é!', '´íÎó', MB_OK);
+    end;
+
+    //Prevent beep
+    Key := #0;
+  end;
+end;
+
 procedure TForm1.ComLibToMemo(com1: TTypeLibrary);
 var
   i, j, k:Integer;
-  MyTreeNode1: TTreeNode;
   str: string;
   clsid: string;
   progid:PChar;
@@ -140,11 +177,11 @@ begin
     with com1.CoClasses[i] do
     begin
       clsid := GuidToString(Guid);
-      Memo1.Lines.Add('CLASSID = '+ clsid);
+      edtClsId.Text := clsid;
       ret := ActiveX.ProgIDFromCLSID(Guid, progid);
       if ret = S_OK then
       begin
-        Memo1.Lines.Add('ProgID  = '+ progid);
+        edtProgID.Text := progid;
       end
       else if ret = REGDB_E_CLASSNOTREG then
       begin
@@ -230,10 +267,6 @@ end;
 procedure TForm1.ShowInterface();
 var
   com1:TTypeLibrary;
-
-  i,j:Integer;
-  MyTreeNode1: TTreeNode;
-  path :string;
 begin
   if Edit1.Text = '' then
   begin
@@ -274,6 +307,12 @@ begin
   DragAcceptFiles( Handle, True );
 end;
 
+procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key=VK_ESCAPE then Close;
+end;
+
 procedure TForm1.FormShow(Sender: TObject);
 begin
   if Length(FilePath) > 0 then
@@ -292,5 +331,56 @@ begin
        Memo1.SelectAll;
        Key:=0;
      end;
-  end;
+end;
+
+procedure TForm1.EnumSubKeys(RootKey: HKEY; const Key: string);
+var
+  Registry: TRegistry;
+  SubKeyNames: TStringList;
+  Name: string;
+begin
+  Registry := TRegistry.Create;
+  Try
+    Registry.RootKey := RootKey;
+    Registry.OpenKeyReadOnly(Key);
+    SubKeyNames := TStringList.Create;
+    Try
+      Registry.GetKeyNames(SubKeyNames);
+      for Name in SubKeyNames do
+        MessageBox(0, 'Found!','dfef', MB_OK);
+    Finally
+      SubKeyNames.Free;
+    End;
+  Finally
+    Registry.Free;
+  End;
+end;
+
+procedure TForm1.FindClsId(clsid: string);
+var
+  reg: TRegistry;
+  Key: String;
+begin
+  Key := 'CLSID\' + clsid;
+  reg := TRegistry.Create;
+  reg.RootKey := HKEY_CLASSES_ROOT;
+  Try
+    if (reg.KeyExists(Key)) then
+    Begin
+      if (reg.OpenKeyReadOnly(Key + '\InprocServer32')) then
+      begin
+        Edit1.Text :=reg.ReadString('');
+        ShowInterface();
+      end
+      else
+      begin
+        MessageBox(0, 'Open InprocServer32 key error','ERROR', MB_OK);
+      end;
+
+    End;
+  finally
+
+  End;
+end;
+
 end.
